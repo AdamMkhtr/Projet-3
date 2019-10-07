@@ -20,7 +20,10 @@ class Vault {
   
   let healVault = [DamagedWand(),ClassicdWand(),GreatWand(),LegendaryWand()]
   
-  let rand = [1,2,3,4]
+  var canChangeWeapon: Bool {
+    let randomNumber = Int.random(in: 0...4)
+    return randomNumber == 1
+  }
   
   
   var player = Player()
@@ -33,76 +36,56 @@ class Vault {
   
   
   
-  func randVaultAttack (character: Character) {
-    
-    let randomLoot = Int(arc4random_uniform(UInt32(rand.count)))
-    let resultRand = rand[randomLoot]
-    
-    if resultRand == 1 {
-      let randomAttackVault = Int(arc4random_uniform(UInt32(attackVault.count)))
-      let lootAttack = attackVault[randomAttackVault]
-      
-      print("Un coffre est tombé il contient \(lootAttack) veux tu l'équiper ?"
-        + "\n1. Oui"
-        + "\n1. Non")
-      
-      
-      if let line = readLine() {
-        
-        switch line {
-          
-        case "1":
-          character.weapon = lootAttack
-          
-        case "2":
-          return
-          
-          
-        default:
-          print("Je n'ai pas compris")
-        }
-      }
-      
-    }
-    
+   private func takeRandomWeapon (from weapons: [Weapon]) -> Weapon {
+    let range = 0..<weapons.count
+    let randomIndex = Int.random(in: range)
+    return weapons[randomIndex]
   }
   
+  private func askIfWeaponIsAccepted(weapon: Weapon) -> Bool {
+    let message = "Un coffre est tombé il contient \(weapon.name) veux "
+      + "tu  l'équiper ?\n1. Oui\n2. Non"
+    
+    var choice = ""
+    
+    repeat {
+      print(message)
+      choice = readLine() ?? ""
+      if (choice != "1" && choice != "2") {
+        print("Veuillez choisir un nombre en 1 et 2.")
+      }
+    } while (choice != "1" && choice != "2")
+    
+    if choice == "1" {
+      return true
+    } else {
+      return false
+    }
+
+  }
   
+  private func changeWeaponIfAccepted(character: Character, weapon: Weapon) {
+    let shouldChangeWeapon = askIfWeaponIsAccepted(weapon: weapon)
+    if shouldChangeWeapon {
+      character.weapon = weapon
+    }
+  }
   
+  func randVaultAttack(character: Character) {
+    guard canChangeWeapon == true else { return }
+    let weapon = takeRandomWeapon(from: attackVault)
+    changeWeaponIfAccepted(character: character, weapon: weapon)
+  }
   
   func randVaultHeal (character: Character) {
-    
-    let randomLoot = Int(arc4random_uniform(UInt32(rand.count)))
-    let resultRand = rand[randomLoot]
-    
-    if resultRand == 1 {
-      let randomHealVault = Int(arc4random_uniform(UInt32(healVault.count)))
-      let lootHeal = healVault[randomHealVault]
-      
-      print("Un coffre est tombé il contient \(lootHeal) veux tu l'équiper ?"
-        + "\n1. Oui"
-        + "\n1. Non")
-      
-      
-      if let line = readLine() {
-        
-        switch line {
-          
-        case "1":
-          character.weapon = lootHeal
-          
-        case "2":
-          return
-          
-          
-        default:
-          print("Je n'ai pas compris")
-        }
-      }
-      
-    }
-    
+    guard canChangeWeapon == true else { return }
+    let weapon = takeRandomWeapon(from: healVault)
+    changeWeaponIfAccepted(character: character, weapon: weapon)
   }
+
+  
+  
+
   
 }
 

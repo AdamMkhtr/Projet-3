@@ -7,13 +7,17 @@ import Foundation
 
 class Analytics {
   
-  var countRound = 0
+  private var countRound = 0
   
+  /// Count numbers of round.
   func addRound() {
   countRound += 1
   }
   
-  func endStats() {
+  /// Print statistics
+  func endStats(player: Player) {
+    print("\(countRound)")
+    print("\(player.description)")
     
   }
   

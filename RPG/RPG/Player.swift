@@ -24,14 +24,11 @@ class Player {
   var isFull: Bool {
     return team.isFull
   }
-  
+  /// Return true if all characters are dead, false otherwise.
   var isAllCharacterDead: Bool {
     return team.isAllCharacterDead
   }
   
-  var test: Any {
-    return team.characters
-  }
   
   
   //----------------------------------------------------------------------------
@@ -40,7 +37,7 @@ class Player {
   
 
   func getCharacter(at index: Int) -> Character {
-    return getCharacter(at: index)
+    return team.getCharacter(at: index)
   }
   
   
@@ -54,11 +51,18 @@ class Player {
   
   
   func printCharacters() {
-    print("\(getCharacter(at: 0).name)"
-      + "\n1 \(getCharacter(at: 1).name)"
-      + "\n2 \(getCharacter(at: 2).name)")
+    print("1 \(getCharacter(at: 0).name)"
+      + "\n2 \(getCharacter(at: 1).name)"
+      + "\n3 \(getCharacter(at: 2).name)")
     
   }
+  
+  // dans character ouvrir un tableau pour name 
+  func isNameAlreadyInTeam(name: String) -> Bool {
+   let isNameinTeam = team.characters.contains {$0.name == name}
+    return isNameinTeam
+  }
+  
   
 }
 
@@ -66,7 +70,7 @@ extension Player: CustomStringConvertible {
   var description: String {
     var message = ""
     
-    for character in team.characters {
+    for character in team.characters.description {
       message += "\n\(character.description)"
     }
     return message
